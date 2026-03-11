@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Heart } from 'lucide-react';
+import { Play, Heart, Plus } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface MusicCardProps {
@@ -7,9 +7,11 @@ interface MusicCardProps {
   subtitle: string;
   imageUrl: string;
   type?: 'playlist' | 'artist' | 'song';
+  onPlay?: () => void;
+  onAddToQueue?: () => void;
 }
 
-export const MusicCard: React.FC<MusicCardProps> = ({ title, subtitle, imageUrl, type = 'playlist' }) => {
+export const MusicCard: React.FC<MusicCardProps> = ({ title, subtitle, imageUrl, type = 'playlist', onPlay, onAddToQueue }) => {
   return (
     <motion.div 
       whileHover={{ y: -8, scale: 1.02 }}
@@ -27,16 +29,25 @@ export const MusicCard: React.FC<MusicCardProps> = ({ title, subtitle, imageUrl,
           <motion.button 
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
-            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:text-zed-orange transition-colors"
+            onClick={(e) => { e.stopPropagation(); onAddToQueue?.(); }}
+            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:text-zed-purple transition-colors"
           >
-            <Heart size={20} />
+            <Plus size={20} />
           </motion.button>
           <motion.button 
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
+            onClick={(e) => { e.stopPropagation(); onPlay?.(); }}
             className="w-14 h-14 rounded-full bg-zed-green flex items-center justify-center shadow-[0_0_20px_rgba(0,255,65,0.4)]"
           >
             <Play size={28} className="text-black ml-1" fill="currentColor" />
+          </motion.button>
+          <motion.button 
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:text-zed-orange transition-colors"
+          >
+            <Heart size={20} />
           </motion.button>
         </div>
         {type === 'artist' && (
